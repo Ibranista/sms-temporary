@@ -5,12 +5,15 @@ import React from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
 import { useFormik } from "formik";
+import { LOGIN } from "@/lib/(apollo-client)/mutations/auth.mutation";
 import { signInSchema as validationSchema } from "@/lib/(schema)/signIn.auth";
 import { initialValues } from "@/_constants/auth.constants";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@apollo/client";
 
 export default function SigninWithPassword() {
+  const [logIn, { data, loading: loginLoading, error }] = useMutation(LOGIN);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
@@ -19,27 +22,42 @@ export default function SigninWithPassword() {
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      const { phoneNumber, password } = values ?? {};
+      const { email, password } = values ?? {};
       setLoading(true);
+      try {
+        console.log("loggin in")
+        const response = await logIn({ variables: { email, password } });
+        if (response && data) {
+          const { accessToken, user } = data.logIn ?? {};
+          const result = await signIn('Signin', {
+            redirect: false,
+            accessToken,
+            user
+          });
+        }
+      } catch (err) {
+        console.error("Login failed:", err)
+      }
+      setLoading(false);
       // setTimeout(() => {
       //   setLoading(false);
       //   console.log("Form submitted:", values);
       // }, 1000);
 
-      const response = await signIn("credentials", {
-        phoneNumber: phoneNumber,
-        password: password,
-        redirect: false
-      });
+      // const response = await signIn("credentials", {
+      //   email: email,
+      //   password: password,
+      //   redirect: false
+      // });
 
-      if (response?.error) {
-        setLoading(false);
-        // setError("Incorrect phonenumber or password");
-      } else if (response?.ok) {
-        setLoading(false);
-        router.push("/");
-        router.refresh();
-      }
+      // if (response?.error) {
+      //   setLoading(false);
+      //   // setError("Incorrect phonenumber or password");
+      // } else if (response?.ok) {
+      //   setLoading(false);
+      //   router.push("/");
+      //   router.refresh();
+      // }
 
     },
   });
@@ -48,18 +66,18 @@ export default function SigninWithPassword() {
     <form onSubmit={formik.handleSubmit}>
       {/* Phone Number Input */}
       <InputGroup
-        type="text"
-        label="Phone Number"
+        type="email"
+        label="email"
         className="mb-6 [&_input]:py-[15px] border-stroke rounded-md"
-        placeholder="Enter your phone number"
-        name="phoneNumber"
+        placeholder="Enter your Email"
+        name="email"
         handleChange={formik.handleChange}
-        value={formik.values.phoneNumber}
-        icon={<EmailIcon />}
+        value={formik.values.email}
+      // icon={<EmailIcon />}
       />
-      {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+      {formik.touched.email && formik.errors.email && (
         <div className="text-red-500 text-sm mb-4 -mt-4">
-          {formik.errors.phoneNumber}
+          {formik.errors.email}
         </div>
       )}
 

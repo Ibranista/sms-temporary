@@ -39,10 +39,10 @@ export const options: NextAuthOptions = {
             id: 'Signin',
             name: 'Signin',
             credentials: {
-                phoneNumber: {
-                    label: 'Phone Number',
+                email: {
+                    label: 'Email',
                     type: 'text',
-                    placeholder: 'Phone Number',
+                    placeholder: 'Email',
                 },
                 password: {
                     label: 'Password',
@@ -63,14 +63,16 @@ export const options: NextAuthOptions = {
 
     callbacks: {
         jwt: ({ token, user }) => {
+            console.log("jwt is called'==>,:", { token, user })
             if (user) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                token.id = (user as any)._id;
+                token.id = (user as any).id;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                token.token = (user as any).token;
+                token.token = (user as any).accessToken;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                token.phoneNumber = (user as any).phoneNumber;
+                token.email = (user as any).email;
             }
+            console.log("jwt is called again'==>,:", { token, user })
             return token;
         },
         session: ({ session, token }) => {

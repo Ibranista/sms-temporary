@@ -1,14 +1,10 @@
-import { IUser } from '@/_types/user.interface';
+import { IUser } from '@/types/User.interface';
 import api from './services.api';
 
 export const authService = {
-  async login({ phoneNumber, password }: { phoneNumber: string; password: string }) {
+  async login(credentials: any) {
     try {
-      const user = await api.post('/user/login', {
-        phoneNumber,
-        password,
-      });
-      return user.data.data;
+      return credentials;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(err?.response?.data?.message ? err.response.data.message : 'Error logging in');
