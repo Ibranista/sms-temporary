@@ -7,19 +7,40 @@ import { Checkbox } from "../FormElements/checkbox";
 import { useFormik } from "formik";
 import { signInSchema as validationSchema } from "@/lib/(schema)/signIn.auth";
 import { initialValues } from "@/_constants/auth.constants";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SigninWithPassword() {
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setLoading(true);
-      setTimeout(() => {
+      const { phoneNumber, password } = values ?? {};
+      setLoading(true);
+      // setTimeout(() => {
+      //   setLoading(false);
+      //   console.log("Form submitted:", values);
+      // }, 1000);
+
+      const response = await signIn("credentials", {
+        phoneNumber: phoneNumber,
+        password: password,
+        redirect: false
+      });
+
+      if (response?.error) {
         setLoading(false);
-        console.log("Form submitted:", values);
-      }, 1000);
+        // setError("Incorrect phonenumber or password");
+      } else if (response?.ok) {
+        setLoading(false);
+        router.push("/");
+        router.refresh();
+      }
+
     },
   });
 
