@@ -1,14 +1,21 @@
 import Signin from "@/_components/Auth/Signin";
-import Breadcrumb from "@/_components/Breadcrumbs/Breadcrumb";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import type { Metadata } from "next";
-import Image from "next/image";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign in",
 };
 
-export default function SignIn() {
+export default async function SignIn() {
+
+  const session = await getServerSession(options);
+  if (session) {
+    redirect("/");
+  }
+
   return (
     <>
       <div className="items-center h-screen grid grid-cols-[1fr_2fr]">

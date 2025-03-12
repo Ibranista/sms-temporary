@@ -63,7 +63,7 @@ export const options: NextAuthOptions = {
 
     callbacks: {
         jwt: ({ token, user }) => {
-            console.log("jwt is called'==>,:", { token, user })
+            console.log("user==>",user)
             if (user) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 token.id = (user as any).id;
@@ -71,8 +71,9 @@ export const options: NextAuthOptions = {
                 token.token = (user as any).accessToken;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 token.email = (user as any).email;
+                token.phoneNumber = (user as any).phone;
+                // token.user;
             }
-            console.log("jwt is called again'==>,:", { token, user })
             return token;
         },
         session: ({ session, token }) => {

@@ -13,6 +13,8 @@ import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { ApolloWrapper } from "@/lib/(apollo-client)/ApolloWrapper";
+import { options } from "./api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +25,9 @@ export const metadata: Metadata = {
     "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const session = await getServerSession(options);
+  console.log("the session==>", session)
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

@@ -15,7 +15,6 @@ import { useMutation } from "@apollo/client";
 export default function SigninWithPassword() {
   const [logIn, { data, loading: loginLoading, error }] = useMutation(LOGIN);
   const [loading, setLoading] = React.useState(false);
-  const router = useRouter();
 
   const formik = useFormik({
     initialValues,
@@ -30,35 +29,15 @@ export default function SigninWithPassword() {
         if (response && data) {
           const { accessToken, user } = data.logIn ?? {};
           const result = await signIn('Signin', {
-            redirect: false,
+            redirect: "/",
             accessToken,
-            user
+            ...user
           });
         }
       } catch (err) {
         console.error("Login failed:", err)
       }
       setLoading(false);
-      // setTimeout(() => {
-      //   setLoading(false);
-      //   console.log("Form submitted:", values);
-      // }, 1000);
-
-      // const response = await signIn("credentials", {
-      //   email: email,
-      //   password: password,
-      //   redirect: false
-      // });
-
-      // if (response?.error) {
-      //   setLoading(false);
-      //   // setError("Incorrect phonenumber or password");
-      // } else if (response?.ok) {
-      //   setLoading(false);
-      //   router.push("/");
-      //   router.refresh();
-      // }
-
     },
   });
 
