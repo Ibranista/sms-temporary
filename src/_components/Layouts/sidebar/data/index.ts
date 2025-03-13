@@ -61,6 +61,16 @@ export const NAV_DATA = [
           },
         ],
       },
+      {
+        title: "SMS",
+        icon: Icons.SmsIcon,
+        items: [
+          {
+            title: "Send SMS",
+            url: "/sms/send-sms",
+          },
+        ],
+      },
     ],
   },
   {

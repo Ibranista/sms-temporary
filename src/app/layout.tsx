@@ -11,7 +11,6 @@ import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { ApolloWrapper } from "@/lib/(apollo-client)/ApolloWrapper";
 import { options } from "./api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";

@@ -1,5 +1,5 @@
 "use client";
-import { EmailIcon, PasswordIcon } from "@/assets/icons";
+import { PasswordIcon } from "@/assets/icons";
 import Link from "next/link";
 import React from "react";
 import InputGroup from "../FormElements/InputGroup";
@@ -9,7 +9,6 @@ import { LOGIN } from "@/lib/(apollo-client)/mutations/auth.mutation";
 import { signInSchema as validationSchema } from "@/lib/(schema)/signIn.auth";
 import { initialValues } from "@/_constants/auth.constants";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client";
 
 export default function SigninWithPassword() {

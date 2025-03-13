@@ -9,6 +9,7 @@ import { ChatsCard } from "./_components/chats-card";
 import { OverviewCardsGroup } from "./_components/overview-cards";
 import { OverviewCardsSkeleton } from "./_components/overview-cards/skeleton";
 import { RegionLabels } from "./_components/region-labels";
+import LayoutContainer from "@/_components/Layouts/layout-container";
 
 type PropsType = {
   searchParams: Promise<{
@@ -21,11 +22,10 @@ export default async function Home({ searchParams }: PropsType) {
   const extractTimeFrame = createTimeFrameExtractor(selected_time_frame);
 
   return (
-    <>
+    <LayoutContainer>
       <Suspense fallback={<OverviewCardsSkeleton />}>
         <OverviewCardsGroup />
       </Suspense>
-
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-9 2xl:gap-7.5">
         <PaymentsOverview
           className="col-span-12 xl:col-span-7"
@@ -57,6 +57,6 @@ export default async function Home({ searchParams }: PropsType) {
           <ChatsCard />
         </Suspense>
       </div>
-    </>
+    </LayoutContainer>
   );
 }
