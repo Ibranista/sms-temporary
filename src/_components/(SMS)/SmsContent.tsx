@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-function SmsContent() {
-    const [message, setMessage] = useState("");
-
+function SmsContent({ message, setMessage }:{message:string,setMessage:}) {
+    // const [message, setMessage] = useState("");
+    console.log({ message })
     // Helper to calculate SMS details
     const calculateSmsDetails = (message: string) => {
-        const charsUsed = message.length;
+        const charsUsed = message?.length;
         const smsParts = Math.ceil(charsUsed / 159);
         const pricePerSms = 0.65; // Example price per SMS
         const smsPrice = smsParts * pricePerSms;
@@ -16,7 +16,7 @@ function SmsContent() {
     const { charsUsed, smsParts, smsPrice } = calculateSmsDetails(message);
 
     const insertPlaceholder = (placeholder: string) => {
-        setMessage((prev) => `${prev} [[${placeholder}]]`);
+        setMessage((prev:any) => `${prev} [[${placeholder}]]`);
     };
 
     return (

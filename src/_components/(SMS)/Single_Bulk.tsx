@@ -90,7 +90,7 @@ export default function SingleBulkSms() {
             </div>
 
             {/* message parts */}
-            <SmsContent />
+            {/* <SmsContent /> */}
         </div>
     );
 }

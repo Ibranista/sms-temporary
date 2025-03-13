@@ -7,8 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import InputGroup from "../FormElements/InputGroup";
+import { useState } from "react";
+import SmsContent from "./SmsContent";
 
 export default function SendSingleSMS() {
+    const [message, setMessage] = useState("");
 
     const formik = useFormik({
         initialValues,
@@ -86,6 +89,7 @@ export default function SendSingleSMS() {
                     />
                 </div>
             </div>
+            {/* <SmsContent message={message} setMessage={setMessage} /> */}
         </form>
     )
 }
