@@ -71,6 +71,16 @@ export const NAV_DATA = [
           },
         ],
       },
+      {
+        title: "OTP",
+        icon: Icons.OTPIcon,
+        items: [
+          {
+            title: "Send OTP",
+            url: "/otp/send-otp",
+          },
+        ],
+      },
     ],
   },
   {
