@@ -1,17 +1,22 @@
 import { singleSMSFormInitialValues } from "@/_constants/sms.constants";
+import { charEncoding } from "@/lib/utils";
 import { FormikProps } from "formik";
+import debounce from "debounce";
+import { useMemo } from "react";
 
 function SmsContent({ message, setMessage, formik }: { message: string, setMessage: React.Dispatch<React.SetStateAction<string>>, formik: FormikProps<typeof singleSMSFormInitialValues> }) {
+
     const calculateSmsDetails = (message: string) => {
+
         const charsUsed = message?.length;
         const smsParts = Math.ceil(charsUsed / 159);
-        const pricePerSms = 0.65; // Example price per SMS
+        const pricePerSms = 0.01;
         const smsPrice = smsParts * pricePerSms;
-
-        return { charsUsed, smsParts, smsPrice };
+        const charType = charEncoding(message);
+        return { charType, charsUsed, smsParts, smsPrice };
     };
 
-    const { charsUsed, smsParts, smsPrice } = calculateSmsDetails(message);
+    const { charsUsed, smsParts, smsPrice, charType } = calculateSmsDetails(formik.values.message);
 
     const insertPlaceholder = (placeholder: string) => {
         setMessage((prev: any) => `${prev} [[${placeholder}]]`);
@@ -48,7 +53,7 @@ function SmsContent({ message, setMessage, formik }: { message: string, setMessa
                 )
             }
             <div className="mt-4 text-sm text-gray-600 flex flex-col gap-2 mb-5">
-                <p>Encoding: GSM</p>
+                <p>Encoding: {charType}</p>
                 <p>SMS Parts: {smsParts}</p>
                 <p>Chars Used: {charsUsed}</p>
                 <p>Price: {smsPrice.toFixed(2)} ETB</p>
