@@ -9,35 +9,50 @@ import Swal from "sweetalert2";
 import InputGroup from "../FormElements/InputGroup";
 import { useState } from "react";
 import SmsContent from "./SmsContent";
+import { Button } from "../ui-elements/button";
+import { useMutation } from "@apollo/client";
+import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 
 export default function SendSingleSMS() {
-    const [message, setMessage] = useState("");
+    const [sendSMS, { data, loading, error }] = useMutation(SENDSMS);
+    const [message, setMessage] = useState<string>("");
 
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async (values) => {
-            console.log("values==>", values)
-        }
-    })
+            const { phoneNumber, message } = values;
+            try {
+                console.log(values)
+                const response = await sendSMS({ variables: { phoneNumber, message } })
+                if (response) {
+                    Swal.fire({
+                        title: "Message Sent",
+                        icon: "success",
+                        draggable: false,
+                        width: 400
+                    })
+                }
+            } catch (err) {
+                console.error("Login failed:", err)
+            }
+        },
+    });
 
-    const submitted = () => {
-        Swal.fire({
-            title: "Successfully registered",
-            icon: "success",
-            draggable: false
-        })
-    }
+    // const submitted = () => {
+    //     Swal.fire({
+    //         title: "Successfully registered",
+    //         icon: "success",
+    //         draggable: false
+    //     })
+    // }
 
     return (
-        <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+        <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0 pt-6">
             <div>
                 <div className="mb-4">
                     <p className="font-medium text-gray-700 mb-2">Choose Contact</p>
                     <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-md border">
-                        {/* <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 2a6 6 0 100 12 6 6 0 000-12zM2 18a8 8 0 1116 0H2z" />
-                                        </svg> */}
                         <FontAwesomeIcon icon={faSearch} width={25} height={5} />
                         <input
                             type="text"
@@ -48,10 +63,6 @@ export default function SendSingleSMS() {
                 </div>
                 <div>
                     <p className="font-medium text-gray-700 mb-3">Single SMS form</p>
-                    {/* <label className="block text-sm mb-1">Select Billing:</label>
-                                    <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
-                                        <option>Billing#no 63</option>
-                                    </select> */}
                     <label className="block text-sm mb-1">Sender ID:</label>
                     <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
                         <option>Tamesol</option>
@@ -64,14 +75,14 @@ export default function SendSingleSMS() {
                         <InputGroup
                             type="phoneNumber"
                             label="phoneNumber"
-                            className="mb-6 [&_input]:py-[15px] border-stroke rounded-md w-full"
+                            className="mb-6 border-stroke rounded-md w-full"
                             placeholder="Enter your phone number"
                             name="phoneNumber"
                             handleChange={formik.handleChange}
                             value={formik.values.phoneNumber}
                         />
                         {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                            <div className="text-red-500 text-sm -mt-5 align-self">
+                            <div className="text-red-500 text-sm -mt-7 align-self">
                                 {formik.errors.phoneNumber}
                             </div>
                         )}
@@ -89,7 +100,20 @@ export default function SendSingleSMS() {
                     />
                 </div>
             </div>
-            {/* <SmsContent message={message} setMessage={setMessage} /> */}
+            <SmsContent message={message} setMessage={setMessage} formik={formik} />
+
+            {/* Submit Button */}
+            <div className="col-span-1 md:col-span-2 flex justify-start">
+                <Button
+                    type="submit"
+                    variant={"primary"}
+                    className="rounded-md"
+                    size={"small"}
+                    disabled={formik.isSubmitting}
+                    label={formik.isSubmitting ? "Sending..." : "Send SMS"}
+                />
+            </div>
         </form>
+
     )
 }

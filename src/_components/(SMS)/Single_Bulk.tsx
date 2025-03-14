@@ -10,7 +10,7 @@ import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 export default function SingleBulkSms() {
     const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
     const [schedule, setSchedule] = useState(false);
-    const [sendSMS, { data,loading: loginLoading, error }] = useMutation(SENDSMS);
+    const [sendSMS, { data, loading: loginLoading, error }] = useMutation(SENDSMS);
 
     // const formik = useFormik({
     //     initialValues,
@@ -39,8 +39,8 @@ export default function SingleBulkSms() {
 
     const x = async () => {
         const response = await sendSMS({ variables: { phoneNumber: "0919892275", message: "Hello Ibraheem!" } })
-        if(response){
-            console.log({data})
+        if (response) {
+            console.log({ data })
         }
     }
 
@@ -71,13 +71,13 @@ export default function SingleBulkSms() {
             {activeTab === "single" && (
                 <SendSingleSMS />
             )}
-
+            {/* 
             {activeTab === "bulk" && (
                 <SendBulkSMS />
-            )}
+            )} */}
 
             {/* Schedule part */}
-            <div className="mt-4 flex items-center gap-x-2 mb-3">
+            {/* <div className="mt-4 flex items-center gap-x-2 mb-3">
                 <label className="text-md text-gray-700 cursor-pointer text-gray-500">
                     <input
                         type="checkbox"
@@ -87,7 +87,7 @@ export default function SingleBulkSms() {
                     />
                     Schedule
                 </label>
-            </div>
+            </div> */}
 
             {/* message parts */}
             {/* <SmsContent /> */}

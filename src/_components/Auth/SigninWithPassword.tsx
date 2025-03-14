@@ -21,9 +21,7 @@ export default function SigninWithPassword() {
     onSubmit: async (values) => {
       setLoading(true);
       const { email, password } = values ?? {};
-      setLoading(true);
       try {
-        console.log("loggin in")
         const response = await logIn({ variables: { email, password } });
         if (response && data) {
           const { accessToken, user } = data.logIn ?? {};

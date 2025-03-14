@@ -1,9 +1,7 @@
-import { useState } from "react";
+import { singleSMSFormInitialValues } from "@/_constants/sms.constants";
+import { FormikProps } from "formik";
 
-function SmsContent({ message, setMessage }:{message:string,setMessage:}) {
-    // const [message, setMessage] = useState("");
-    console.log({ message })
-    // Helper to calculate SMS details
+function SmsContent({ message, setMessage, formik }: { message: string, setMessage: React.Dispatch<React.SetStateAction<string>>, formik: FormikProps<typeof singleSMSFormInitialValues> }) {
     const calculateSmsDetails = (message: string) => {
         const charsUsed = message?.length;
         const smsParts = Math.ceil(charsUsed / 159);
@@ -16,15 +14,15 @@ function SmsContent({ message, setMessage }:{message:string,setMessage:}) {
     const { charsUsed, smsParts, smsPrice } = calculateSmsDetails(message);
 
     const insertPlaceholder = (placeholder: string) => {
-        setMessage((prev:any) => `${prev} [[${placeholder}]]`);
+        setMessage((prev: any) => `${prev} [[${placeholder}]]`);
     };
 
     return (
-        <div>
+        <div className="">
             <p className="font-medium text-gray-700 mb-3">SMS Content</p>
             <div className="flex space-x-2 mb-2">
                 {["First Name", "Last Name", "Birthday", "Phone", "Date", "Sex"].map(
-                    (field) => (
+                    (field: string) => (
                         <button
                             key={field}
                             className="px-2 py-1 border text-sm rounded bg-gray-100 hover:bg-gray-200 border-dotted border-solid border-2 border-slate-300"
@@ -36,12 +34,20 @@ function SmsContent({ message, setMessage }:{message:string,setMessage:}) {
                 )}
             </div>
             <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-1/2 border p-2 rounded text-sm h-32 outline-[#5750F1]"
+                name="message"
+                value={formik.values.message}
+                onChange={formik.handleChange}
+                className="w-full border p-2 rounded text-sm h-32 outline-[#5750F1]"
                 placeholder="Type your message here..."
             />
-            <div className="mt-4 text-sm text-gray-600">
+            {
+                formik && formik.touched.message && formik.errors.message && (
+                    <div className="text-red-500 text-sm -mt-0 align-self">
+                        {formik.errors.message}
+                    </div>
+                )
+            }
+            <div className="mt-4 text-sm text-gray-600 flex flex-col gap-2 mb-5">
                 <p>Encoding: GSM</p>
                 <p>SMS Parts: {smsParts}</p>
                 <p>Chars Used: {charsUsed}</p>
