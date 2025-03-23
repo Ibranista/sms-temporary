@@ -27,9 +27,11 @@ export default function SigninWithPassword() {
         });
 
         if (result?.error) {
+          console.log("result==>", result)
           setLoading(false);
         } else {
           setLoading(false);
+          console.log("result==>", result)
           redirect("/");
         }
 
