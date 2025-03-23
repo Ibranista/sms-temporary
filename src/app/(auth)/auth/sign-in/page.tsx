@@ -1,7 +1,6 @@
 import Signin from "@/_components/Auth/Signin";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
+// import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -11,15 +10,15 @@ export const metadata: Metadata = {
 
 export default async function SignIn() {
 
-  const session = await getServerSession(options);
-  if (session) {
-    redirect("/");
-  }
+  // const session = await getServerSession(options);
+  // if (session) {
+  //   redirect("/");
+  // }
 
   return (
     <>
-      <div className="items-center h-screen grid grid-cols-[1fr_2fr]">
-        <div className="w-full p-7.5 bg-primary h-full box-border">
+      <div className="items-center h-screen grid md:grid-cols-[1fr_2fr]">
+        <div className="hidden md:block w-full p-7.5 bg-primary h-full box-border">
           <div className="overflow-hidden rounded-2xl px-12.5 dark:!bg-dark-2 dark:bg-none flex flex-col justify-center h-full">
             <Link className="mb-10 inline-block text-white" href="/">
               Tamcon SMS Gateway
@@ -37,7 +36,7 @@ export default async function SignIn() {
         </div>
 
         <div className="w-full">
-          <div className="w-full p-4 sm:p-12.5 xl:p-15 max-w-[50%] mx-auto">
+          <div className="w-full p-4 sm:p-12.5 xl:p-15 md:max-w-[80%] lg:max-w-[60%] mx-auto">
             <p className="text-center font-medium text-primary text-4xl">Sign In</p>
             <Signin />
           </div>

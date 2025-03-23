@@ -5,14 +5,12 @@ import React from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
 import { useFormik } from "formik";
-import { LOGIN } from "@/lib/(apollo-client)/mutations/auth.mutation";
 import { signInSchema as validationSchema } from "@/lib/(schema)/signIn.auth";
 import { initialValues } from "@/_constants/auth.constants";
 import { signIn } from "next-auth/react";
-import { useMutation } from "@apollo/client";
+import { redirect } from "next/navigation";
 
 export default function SigninWithPassword() {
-  const [logIn, { data, loading: loginLoading, error }] = useMutation(LOGIN);
   const [loading, setLoading] = React.useState(false);
 
   const formik = useFormik({
@@ -22,15 +20,19 @@ export default function SigninWithPassword() {
       setLoading(true);
       const { email, password } = values ?? {};
       try {
-        const response = await logIn({ variables: { email, password } });
-        if (response && data) {
-          const { accessToken, user } = data.logIn ?? {};
-          const result = await signIn('Signin', {
-            redirect: "/",
-            accessToken,
-            ...user
-          });
+        const result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false
+        });
+
+        if (result?.error) {
+          setLoading(false);
+        } else {
+          setLoading(false);
+          redirect("/");
         }
+
       } catch (err) {
         console.error("Login failed:", err)
       }
