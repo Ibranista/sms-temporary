@@ -1,10 +1,9 @@
-import darkLogo from "@/assets/logos/dark.svg";
-import logo from "@/assets/logos/main.svg";
+import logo from "@/assets/logos/TamSMS.svg";
 import Image from "next/image";
 
 export function Logo() {
   return (
-    <div className="relative h-8 max-w-[10.847rem]">
+    <div className="relative w-[100%] h-[5rem] aspect-1">
       <Image
         src={logo}
         fill
@@ -13,7 +12,7 @@ export function Logo() {
         role="presentation"
         quality={100}
       />
-
+      {/* 
       <Image
         src={darkLogo}
         fill
@@ -21,7 +20,7 @@ export function Logo() {
         alt="NextAdmin logo"
         role="presentation"
         quality={100}
-      />
+      /> */}
     </div>
   );
 }
