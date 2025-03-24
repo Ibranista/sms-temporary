@@ -1,52 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
-import SmsContent from "./SmsContent";
 import SendSingleSMS from "./Send_Single";
 import SendBulkSMS from "./Send_Bulk";
 import { useMutation } from "@apollo/client";
 import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
+import { GET_SHORT_CODES } from "@/lib/(apollo-client)/mutations/sms.query";
+import { client } from "@/lib/(apollo-client)/mutations/auth.mutation";
 
 export default function SingleBulkSms() {
     const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
-    const [schedule, setSchedule] = useState(false);
     const [sendSMS, { data, loading: loginLoading, error }] = useMutation(SENDSMS);
+    const [shortCodes, setShortCodes] = useState<{
+        SenderID: {
+            senderID: string
+        },
+        shortCode: string
+    }[]>();
 
-    // const formik = useFormik({
-    //     initialValues,
-    //     validationSchema,
-    //     onSubmit: async (values) => {
-    //         setLoading(true);
-    //         const { email, password } = values ?? {};
-    //         setLoading(true);
-    //         try {
-    //             console.log("loggin in")
-    //             const response = await logIn({ variables: { email, password } });
-    //             if (response && data) {
-    //                 const { accessToken, user } = data.logIn ?? {};
-    //                 const result = await signIn('Signin', {
-    //                     redirect: "/",
-    //                     accessToken,
-    //                     ...user
-    //                 });
-    //             }
-    //         } catch (err) {
-    //             console.error("Login failed:", err)
-    //         }
-    //         setLoading(false);
-    //     },
-    // });
 
-    const x = async () => {
-        const response = await sendSMS({ variables: { phoneNumber: "0919892275", message: "Hello Ibraheem!" } })
-        if (response) {
-            console.log({ data })
-        }
-    }
+    client
+        .query({
+            query: GET_SHORT_CODES,
+            variables: {
+                shortCodesPage: 1,
+            },
+        })
+        .then((response) => {
+            setShortCodes(response?.data?.shortCodes)
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        });
 
     return (
         <div className="mx-auto bg-white shadow p-6 rounded-sm">
-            <button onClick={x}>Send SMS</button>
             <div className="border-b flex space-x-8">
                 <button
                     onClick={() => setActiveTab("single")}
@@ -69,12 +57,12 @@ export default function SingleBulkSms() {
             </div>
 
             {activeTab === "single" && (
-                <SendSingleSMS />
+                <SendSingleSMS shortCodes={shortCodes || []} />
             )}
-            {/* 
+
             {activeTab === "bulk" && (
-                <SendBulkSMS />
-            )} */}
+                <SendBulkSMS shortCodes={shortCodes || []} />
+            )}
 
             {/* Schedule part */}
             {/* <div className="mt-4 flex items-center gap-x-2 mb-3">

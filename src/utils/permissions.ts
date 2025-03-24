@@ -6,6 +6,9 @@ export const permissions = [
         "name": "send:bulk:sms"
     },
     {
+        "name": "send:sms"
+    },
+    {
         "name": "view:sms"
     },
     {

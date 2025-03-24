@@ -10,11 +10,15 @@ import InputGroup from "../FormElements/InputGroup";
 import { useState } from "react";
 import SmsContent from "./SmsContent";
 import { Button } from "../ui-elements/button";
-import { useMutation } from "@apollo/client";
-import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 
-export default function SendSingleSMS() {
-    const [sendSMS, { data, loading, error }] = useMutation(SENDSMS);
+export default function SendSingleSMS({ shortCodes }: {
+    shortCodes: {
+        SenderID: {
+            senderID: string
+        },
+        shortCode: string
+    }[]
+}) {
     const [message, setMessage] = useState<string>("");
 
     const formik = useFormik({
@@ -24,15 +28,17 @@ export default function SendSingleSMS() {
             const { phoneNumber, message } = values;
             try {
                 console.log(values)
-                const response = await sendSMS({ variables: { phoneNumber, message } })
-                if (response) {
+                // const response = await sendSMS({ variables: { phoneNumber, message } })
+                // if (response) {
+                setTimeout(() => {
                     Swal.fire({
                         title: "Message Sent",
                         icon: "success",
                         draggable: false,
                         width: 400
                     })
-                }
+                }, 500)
+                // }
             } catch (err) {
                 console.error("Login failed:", err)
             }
@@ -64,12 +70,21 @@ export default function SendSingleSMS() {
                 <div>
                     <p className="font-medium text-gray-700 mb-3">Single SMS form</p>
                     <label className="block text-sm mb-1">Sender ID:</label>
+                    {/* sender id */}
                     <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
-                        <option>Tamesol</option>
+                        {
+                            shortCodes?.map((shortcode, key) => (
+                                <option key={key}>{shortcode?.SenderID?.senderID}</option>
+                            ))
+                        }
                     </select>
                     <label className="block text-sm mb-1">Select ShortCode:</label>
                     <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
-                        <option>Tamesol SMS</option>
+                        {
+                            shortCodes?.map((shortcode, key) => (
+                                <option key={key}>{shortcode?.shortCode}</option>
+                            ))
+                        }
                     </select>
                     <div className="flex items-baseline mb-3 flex-col gap-3">
                         <InputGroup

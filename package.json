@@ -39,6 +39,7 @@
     "react-toastify": "^11.0.5",
     "sweetalert2": "^11.17.2",
     "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
     "yup": "^1.6.1"
   },
   "devDependencies": {
