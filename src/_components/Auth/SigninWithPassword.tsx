@@ -8,10 +8,11 @@ import { useFormik } from "formik";
 import { signInSchema as validationSchema } from "@/lib/(schema)/signIn.auth";
 import { initialValues } from "@/_constants/auth.constants";
 import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function SigninWithPassword() {
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues,
@@ -31,8 +32,7 @@ export default function SigninWithPassword() {
           setLoading(false);
         } else {
           setLoading(false);
-          console.log("result==>", result)
-          redirect("/");
+          router.push("/");
         }
 
       } catch (err) {

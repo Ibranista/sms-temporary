@@ -1,4 +1,3 @@
-/* eslint-disable */
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { client, LOGIN_MUTATION } from "./lib/(apollo-client)/mutations/auth.mutation";
