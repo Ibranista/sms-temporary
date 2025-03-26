@@ -28,7 +28,6 @@ export default function LoginPage() {
 
         try {
             const result = await logIn({ variables: { email, password } });
-            console.log("Login successful:", result.data.logIn);
         } catch (err) {
             console.error("Login failed:", err);
         }
