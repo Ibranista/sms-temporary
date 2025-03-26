@@ -9,6 +9,7 @@ import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 import { ApolloWrapper } from "@/lib/(apollo-client)/ApolloWrapper";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: {
@@ -33,9 +34,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           {/* <Header /> */}
 
           {/* <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10"> */}
-          <ApolloWrapper>
-            {children}
-          </ApolloWrapper>
+          <SessionProvider>
+            <ApolloWrapper>
+              {children}
+            </ApolloWrapper>
+          </SessionProvider>
           {/* </main> */}
           {/* </div> */}
           {/* </div> */}
