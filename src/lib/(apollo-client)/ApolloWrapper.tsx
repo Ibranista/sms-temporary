@@ -7,6 +7,8 @@ import { useEffect, useMemo, useRef } from "react";
 import { setContext } from "@apollo/client/link/context";
 
 export function ApolloWrapper({ children }: { children: React.ReactNode }) {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const { data: session, status } = useSession();
     const token = session?.accessToken;
 
@@ -26,7 +28,7 @@ export function ApolloWrapper({ children }: { children: React.ReactNode }) {
         });
 
         const httpLink = new HttpLink({
-            uri: "https://sms-gateway-ts.onrender.com/",
+            uri: BASE_URL,
             fetchOptions: { cache: "no-store" },
         });
 
