@@ -28,14 +28,12 @@ export default function SendSingleSMS({ shortCodes }: {
             try {
                 const response = await createMessage({ variables: { phoneNumber, message, senderId, shortCodeId } });
                 if (response) {
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: "Message Sent",
-                            icon: "success",
-                            draggable: false,
-                            width: 400
-                        })
-                    }, 1000)
+                    Swal.fire({
+                        title: "Message Sent",
+                        icon: "success",
+                        draggable: false,
+                        width: 400
+                    })
                 }
             } catch (err) {
                 console.error("Login failed:", error)
@@ -116,7 +114,7 @@ export default function SendSingleSMS({ shortCodes }: {
                     />
                 </div>
             </div>
-            <SmsContent message={message} setMessage={setMessage} formik={formik} />
+            <SmsContent setMessage={setMessage} formik={formik} />
 
             {/* Submit Button */}
             <div className="col-span-1 md:col-span-2 flex justify-start">

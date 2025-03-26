@@ -30,7 +30,7 @@ importers:
         specifier: ^3.45.2
         version: 3.54.1
       axios:
-        specifier: ^1.8.2
+        specifier: ^1.8.4
         version: 1.8.4
       class-variance-authority:
         specifier: ^0.7.1

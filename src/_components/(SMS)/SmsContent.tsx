@@ -1,10 +1,8 @@
 import { singleSMSFormInitialValues } from "@/_constants/sms.constants";
 import { charEncoding } from "@/lib/utils";
 import { FormikProps } from "formik";
-import debounce from "debounce";
-import { useMemo } from "react";
 
-function SmsContent({ message, setMessage, formik }: { message: string, setMessage: React.Dispatch<React.SetStateAction<string>>, formik: FormikProps<typeof singleSMSFormInitialValues> }) {
+function SmsContent({ setMessage, formik }: { setMessage: React.Dispatch<React.SetStateAction<string>>, formik: FormikProps<typeof singleSMSFormInitialValues> }) {
 
     const calculateSmsDetails = (message: string) => {
 

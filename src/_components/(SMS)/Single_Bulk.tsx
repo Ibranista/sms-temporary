@@ -7,16 +7,12 @@ import { useMutation } from "@apollo/client";
 import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 import { GET_SHORT_CODES } from "@/lib/(apollo-client)/mutations/sms.query";
 import { client } from "@/lib/(apollo-client)/mutations/auth.mutation";
+import { IShortCodes } from "@/types/sms.interface";
 
 export default function SingleBulkSms() {
     const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
     const [sendSMS, { data, loading: loginLoading, error }] = useMutation(SENDSMS);
-    const [shortCodes, setShortCodes] = useState<{
-        SenderID: {
-            senderID: string
-        },
-        shortCode: string
-    }[]>();
+    const [shortCodes, setShortCodes] = useState<IShortCodes[]>();
 
 
     client

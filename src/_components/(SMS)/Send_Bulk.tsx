@@ -1,34 +1,54 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SmsContent from "./SmsContent";
+import BulkSmsContent from "./SMS_Bulk_Area";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { Button } from "../ui-elements/button";
-import { singleSMSFormInitialValues as initialValues } from "@/_constants/sms.constants";
+import { bulkSMSFormInitialValues as initialValues } from "@/_constants/sms.constants";
+import { IShortCodes } from "@/types/sms.interface";
+import InputChip from "../FormElements/InputGroup/InputChip";
+import { sendBulkSchema as validationSchema } from "@/lib/(schema)/sms.schema";
+import Swal from "sweetalert2";
+import { useMutation } from "@apollo/client";
+import { SEND_BULK_SMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 
-export default function SendBulkSMS({ shortCodes }: {
-    shortCodes: {
-        SenderID: {
-            senderID: string
-        },
-        shortCode: string
-    }[]
-}) {
-    const [message, setMessage] = useState<string>("");
+export default function SendBulkSMS({ shortCodes }: { shortCodes: IShortCodes[] }) {
+    const [tags, setTags] = useState<string[]>([]);
+    const [createMessage] = useMutation(SEND_BULK_SMS);
+
     const formik = useFormik({
         initialValues,
-        onSubmit: async () => { }
+        validationSchema,
+        onSubmit: async (values) => {
+            const { phoneNumbers, messages, senderId, shortCodeId } = values ?? {};
+
+            try {
+                const response = await createMessage({ variables: { phoneNumbers, messages, senderId, shortCodeId } });
+                if (response) {
+                    Swal.fire({
+                        title: "Message Sent",
+                        icon: "success",
+                        draggable: false,
+                        width: 400
+                    })
+                }
+            } catch (err) {
+                console.error("Login failed:", err)
+            }
+
+        }
     })
+
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+        <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
             <div>
                 <p className="font-medium text-gray-700 mb-3">Bulk SMS Form</p>
-                {/* <label className="block text-sm mb-1">Select Billing:</label>
-                        <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
-                            <option>--select billing--</option>
-                        </select> */}
                 <label className="block text-sm mb-1">Sender ID:</label>
-                <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
+                <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600"
+                    onChange={formik.handleChange}
+                    value={formik.values.senderId}
+                    name="senderId"
+                >
                     {
                         shortCodes?.map((shortcode, key) => (
                             <option key={key}>{shortcode?.SenderID?.senderID}</option>
@@ -43,10 +63,32 @@ export default function SendBulkSMS({ shortCodes }: {
                         ))
                     }
                 </select>
-                <label className="block text-sm mb-1">Select Group ID:</label>
+
+                {/* <label className="block text-sm mb-1">Select Group ID:</label>
                 <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
                     <option>--select group id--</option>
-                </select>
+                </select> */}
+                {/* phone Numbers */}
+                <InputChip
+                    name="phoneNumbers"
+                    chips={tags}
+                    onChipsChange={(newTags) => {
+                        setTags(newTags);
+                        formik.setFieldValue("phoneNumbers", newTags);
+                        formik.setFieldTouched("phoneNumbers", true, false);
+                    }}
+                    placeholder="Add tags and press Enter..."
+                    chipColor="bg-gray-100"
+                    textColor="text-gray-700"
+                    className="w-full"
+                />
+                {
+                    formik && formik.touched.phoneNumbers && formik.errors.phoneNumbers && (
+                        <div className="text-red-500 text-sm -mt-0 align-self">
+                            {formik.errors.phoneNumbers}
+                        </div>
+                    )
+                }
             </div>
             <div>
                 <p className="font-medium text-gray-700 mb-3">SMS Templates</p>
@@ -59,7 +101,7 @@ export default function SendBulkSMS({ shortCodes }: {
                     />
                 </div>
             </div>
-            <SmsContent message={message} setMessage={setMessage} formik={formik} />
+            <BulkSmsContent formik={formik} />
 
             {/* Submit Button */}
             <div className="col-span-1 md:col-span-2 flex justify-start">
@@ -72,6 +114,6 @@ export default function SendBulkSMS({ shortCodes }: {
                     label={formik.isSubmitting ? "Sending..." : "Send SMS"}
                 />
             </div>
-        </div>
+        </form>
     )
 }
