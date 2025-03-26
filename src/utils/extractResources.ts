@@ -3,7 +3,7 @@ import { AnyARecord } from "node:dns";
 export const extractResources = (permissions: any) => {
     const resourceSet = new Set();
 
-    permissions.forEach(({ name }) => {
+    permissions.forEach(({ name }: { name: string }) => {
         const parts = name.split(':');
         if (parts.length > 1) {
             resourceSet.add(parts[parts.length - 1].toLowerCase());

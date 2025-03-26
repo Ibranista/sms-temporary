@@ -5,7 +5,6 @@ export const authService = {
   async login(credentials: any) {
     try {
       return credentials;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(err?.response?.data?.message ? err.response.data.message : 'Error logging in');
     }
@@ -38,7 +37,6 @@ export const authService = {
         },
       });
       return user.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(
         err?.response?.data?.message ? err.response.data.message : 'Error registering in'
@@ -50,7 +48,6 @@ export const authService = {
     try {
       const otp = await api.post(`/otp/sendotp?phoneNumber=${phoneNumber}`);
       return otp.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(
         err?.response?.data?.message ? err.response.data.message : 'Error sending otp in'
@@ -62,7 +59,6 @@ export const authService = {
     try {
       const otp = await api.post(`/otp/sendForgotPasswordOtp?phoneNumber=${phoneNumber}`);
       return otp.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(
         err?.response?.data?.message ? err.response.data.message : 'Error sending otp in'
@@ -89,7 +85,6 @@ export const authService = {
         otp,
       });
       return verifyOtp.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(
         err?.response?.data?.message ? err.response.data.message : 'Error changing password'
@@ -101,7 +96,6 @@ export const authService = {
     try {
       const user = await api.get(`/user/user`);
       return user.data.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw Error(
         err?.response?.data?.message ? err.response.data.message : 'Error changing password'
