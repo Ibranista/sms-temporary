@@ -9,7 +9,7 @@ import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
 import { ApolloWrapper } from "@/lib/(apollo-client)/ApolloWrapper";
-import { getSession, SessionProvider } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -23,10 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const session = await auth();
-  if (!session?.user) {
-    redirect("/auth/sign-in");
-  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

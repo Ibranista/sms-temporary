@@ -34,12 +34,7 @@ API_BASE_URL="API URL"
 pnpm dev
 ```
 
-And voila! You're now ready to start developing. **Happy coding**!
-
-### Version 1.1.0
-- Updated Dependencies
-- Removed Unused Integrations
-- Optimized App
+You're now ready to start developing. **Happy coding**!
 
 ### Version 1.0
 - Initial Release - [May 13, 2024]
