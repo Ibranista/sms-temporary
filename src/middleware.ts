@@ -3,10 +3,7 @@ import { headers } from "next/headers";
 import { permissions } from "./utils/permissions";
 
 export default auth(async (req) => {
-    const headersList = await headers();
-    const refererURL = headersList.get("Referer");
     const { pathname } = req.nextUrl;
-    console.log("auth==>", req.auth)
     // Handle the sign-in route separately.
     if (pathname === "/auth/sign-in") {
         if (req.auth) {
@@ -33,8 +30,8 @@ export default auth(async (req) => {
     }
 
     if (segments.length === 1) {
-        const resource = segments[0].toLowerCase(); // "sms"
-        const neededPermission = `view:${resource}`; // "view:sms"
+        const resource = segments[0].toLowerCase();
+        const neededPermission = `view:${resource}`;
 
         const hasPermission = permissions.some(
             (p) => p.name.toLowerCase() === neededPermission.toLowerCase()
