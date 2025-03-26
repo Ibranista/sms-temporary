@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { headers } from "next/headers";
 import { permissions } from "./utils/permissions";
 
 export default auth(async (req) => {
