@@ -28,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             id: data.logIn.id,
                             email: data.logIn.user.email,
                             token: data.logIn.accessToken,
-                            role: data.logIn.user.role,
+                            role: data.logIn.user.role || "",
                         };
                     }
                     return null;
@@ -42,8 +42,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
-                token.email = user.email;
+                token.id = user?.id || "";
+                token.email = user.email || "";
                 token.role = user.role;
                 token.accessToken = user.token;
             }
@@ -52,9 +52,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async session({ session, token }) {
             session.user.id = token.id;
             session.user.email = token.email;
-            session.user.name = token.name;
+            session.user.name = token.name || "";
             session.accessToken = token.accessToken;
-            session.role = token.role;
+            session.user.role = token.role || "";
             return session;
         },
     },
