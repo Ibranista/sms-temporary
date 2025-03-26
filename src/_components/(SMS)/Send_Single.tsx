@@ -10,48 +10,38 @@ import InputGroup from "../FormElements/InputGroup";
 import { useState } from "react";
 import SmsContent from "./SmsContent";
 import { Button } from "../ui-elements/button";
+import { IShortCodes } from "@/types/sms.interface";
+import { useMutation } from "@apollo/client";
+import { SENDSMS } from "@/lib/(apollo-client)/mutations/sms.mutation";
 
 export default function SendSingleSMS({ shortCodes }: {
-    shortCodes: {
-        SenderID: {
-            senderID: string
-        },
-        shortCode: string
-    }[]
+    shortCodes: IShortCodes[]
 }) {
     const [message, setMessage] = useState<string>("");
+    const [createMessage, { data, loading, error }] = useMutation(SENDSMS);
 
     const formik = useFormik({
         initialValues,
         validationSchema,
         onSubmit: async (values) => {
-            const { phoneNumber, message } = values;
+            const { phoneNumber, message, senderId, shortCodeId } = values;
             try {
-                console.log(values)
-                // const response = await sendSMS({ variables: { phoneNumber, message } })
-                // if (response) {
-                setTimeout(() => {
-                    Swal.fire({
-                        title: "Message Sent",
-                        icon: "success",
-                        draggable: false,
-                        width: 400
-                    })
-                }, 500)
-                // }
+                const response = await createMessage({ variables: { phoneNumber, message, senderId, shortCodeId } });
+                if (response) {
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: "Message Sent",
+                            icon: "success",
+                            draggable: false,
+                            width: 400
+                        })
+                    }, 1000)
+                }
             } catch (err) {
-                console.error("Login failed:", err)
+                console.error("Login failed:", error)
             }
         },
     });
-
-    // const submitted = () => {
-    //     Swal.fire({
-    //         title: "Successfully registered",
-    //         icon: "success",
-    //         draggable: false
-    //     })
-    // }
 
     return (
         <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0 pt-6">
@@ -71,18 +61,29 @@ export default function SendSingleSMS({ shortCodes }: {
                     <p className="font-medium text-gray-700 mb-3">Single SMS form</p>
                     <label className="block text-sm mb-1">Sender ID:</label>
                     {/* sender id */}
-                    <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
+                    <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600"
+                        onChange={formik.handleChange}
+                        value={formik.values.senderId}
+                        name="senderId"
+                    >
                         {
-                            shortCodes?.map((shortcode, key) => (
-                                <option key={key}>{shortcode?.SenderID?.senderID}</option>
-                            ))
+                            shortCodes?.map((shortcode, key) => {
+                                const { SenderID: { senderID, id } } = shortcode ?? {};
+                                return <option key={key} value={id}>
+                                    {senderID}
+                                </option>
+                            })
                         }
                     </select>
                     <label className="block text-sm mb-1">Select ShortCode:</label>
-                    <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600">
+                    <select className="w-full mb-3 border p-2 rounded text-sm text-gray-600"
+                        onChange={formik.handleChange}
+                        value={formik.values.shortCodeId}
+                        name="shortCodeId"
+                    >
                         {
                             shortCodes?.map((shortcode, key) => (
-                                <option key={key}>{shortcode?.shortCode}</option>
+                                <option key={key} value={shortcode?.id}>{shortcode?.shortCode}</option>
                             ))
                         }
                     </select>
