@@ -124,7 +124,7 @@ export default function SendSingleSMS({ shortCodes }: {
                     className="rounded-md"
                     size={"small"}
                     disabled={formik.isSubmitting}
-                    label={formik.isSubmitting ? "Sending..." : "Send SMS"}
+                    label={formik.isSubmitting ? "Sending..." : "Send SMS Amplify"}
                 />
             </div>
         </form>

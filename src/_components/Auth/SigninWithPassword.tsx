@@ -28,11 +28,11 @@ export default function SigninWithPassword() {
         });
 
         if (result?.error) {
-          console.log("result==>", result)
           setLoading(false);
         } else {
           setLoading(false);
           router.push("/");
+          router.refresh();
         }
 
       } catch (err) {
