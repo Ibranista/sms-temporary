@@ -6,6 +6,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     pages: {
         signIn: "/auth/sign-in",
     },
+    trustHost: process.env.AUTH_TRUST_HOST === "true",
     providers: [
         Credentials({
             name: "Credentials",
